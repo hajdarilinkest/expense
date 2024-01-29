@@ -2,6 +2,9 @@
 import { watch } from 'vue';
 import { ref } from 'vue';
 import { errorMessages } from 'vue/compiler-sfc';
+import { useAuthStore } from '../stores/store.js'
+import { useRouter } from 'vue-router';
+// import router from '@/router';
 
 const username = ref('');
 const password = ref('');
@@ -10,9 +13,16 @@ const fname = ref('');
 const lname = ref('');
 const cpassword = ref('');
 const passwordMatch =  ref(true);
+const authStore = useAuthStore();
+const router = useRouter();
 
 const register = () => {
+  //get all data in an array
+  const a = [username.value, password.value, email.value, fname.value, lname, cpassword];
+  //make a dispatch function to send data in store
+  authStore.registerUser(a); 
   console.log('Signed up');
+  router.push('/login')
 };
 watch([password,cpassword], () => {
   passwordMatch.value=password.value === cpassword.value

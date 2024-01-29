@@ -3,17 +3,16 @@ import { ref } from 'vue';
 import { useAuthStore } from '../stores/store';
 import { useRouter } from 'vue-router';
 
-const username = ref('');
+const usernameOrEmail = ref('');
 const password = ref('');
 
 const router = useRouter();
 const authStore = useAuthStore();
 const login = () => {
-  authStore.login({ username: username.value, password: password.value });
+  authStore.login({ usernameOrEmail: usernameOrEmail.value, password: password.value });
   if(authStore.isLoggedIn) {
     router.push('/');
-  }
-  else{
+  } else {
     alert("Username or Password incorrect!");
   }
 };
@@ -29,7 +28,7 @@ const login = () => {
             <v-card-title class="text-h4" >Login</v-card-title>
                <v-card-text > 
                 <v-form @submit.prevent="login" >
-                  <v-text-field v-model="username" label="Username" required></v-text-field>
+                  <v-text-field v-model="usernameOrEmail" label="Username or Email" required></v-text-field>
                   <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
 
                   <v-btn color="primary" type="submit">Login</v-btn>

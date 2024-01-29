@@ -3,25 +3,23 @@ import { defineStore } from 'pinia';
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    users: [
-      { "id": 1, "username": "user", "password": "pass" },
-      { "id": 2, "username": "user1", "password": "pass1" },
-      {"id":3, "username" : "donart", "password": "donart"}
-    ],
+    users: [],
     currentUser: null,
   }),
   getters: {
     isLoggedIn: (state) => !!state.currentUser,
   },
   actions: {
-    login({ username, password }) {
+    login({ usernameOrEmail, password }) {
       const user = this.users.find(
-        (user) => user.username === username && user.password === password
+        (user) => user.username === usernameOrEmail ||
+         user.email === usernameOrEmail
+        && user.password === password
       );
       if (user) {
         console.log('Successful login:', user);
         this.currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.saveState();
       } else {
         console.log('Login failed');
       }
@@ -29,15 +27,25 @@ export const useAuthStore = defineStore({
 
     logout() {
       this.currentUser = null;
-      localStorage.removeItem('currentUser');
+      this.saveState();
     },
 
-    registerUser(newUser) {
+    registerUser(userData) {
+      // You can customize the logic for generating user IDs based on your backend
+      const newUser = {
+        id: this.users.length + 1,
+        username: userData[0],
+        password: userData[1],
+        email: userData[2],
+        fname: userData[3],
+        lname: userData[4],
+      };
+
       try {
         // Assuming synchronous registration for simplicity
         this.users.push(newUser);
         console.log('User registered successfully', newUser);
-        localStorage.setItem('users', JSON.stringify(this.users));
+        this.saveState();
       } catch (error) {
         console.error('Error registering user', error);
       }
@@ -45,21 +53,24 @@ export const useAuthStore = defineStore({
 
     initStore() {
       // Initialize the store state from localStorage
-      const storedUsers = localStorage.getItem('users');
-      if (storedUsers) {
-        this.users = JSON.parse(storedUsers);
+      const storedState = localStorage.getItem('authState');
+      if (storedState) {
+        const { users, currentUser } = JSON.parse(storedState);
+        this.users = users;
+        this.currentUser = currentUser;
       }
+    },
 
-      const storedCurrentUser = localStorage.getItem('currentUser');
-      if (storedCurrentUser) {
-        this.currentUser = JSON.parse(storedCurrentUser);
-      }
+    saveState() {
+      // Save the store state to localStorage
+      const authState = {
+        users: this.users,
+        currentUser: this.currentUser,
+      };
+      localStorage.setItem('authState', JSON.stringify(authState));
     },
   },
 });
-
-export const usePersistedAuthStore = () => {
-  const authStore = useAuthStore();
-  authStore.initStore(); // Initialize the store from localStorage
-  return authStore;
-};
+  //make a variable to hold users as array
+  //store all incoming data with push to that array
+  //return success this page and go to login 
