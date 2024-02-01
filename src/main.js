@@ -6,8 +6,11 @@ import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import App from './App.vue';
-import router from './router';
 import { useAuthStore } from './stores/store';
+
+import router from './router';
+
+export const pinia = createPinia(); //dueshka ta krijosh para se ta bosh createApp
 
 const app = createApp(App);
 const vuetify = createVuetify({
@@ -15,13 +18,13 @@ const vuetify = createVuetify({
   directives,
 });
 
-const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(vuetify).mount('#app');
 
 const authStore = useAuthStore();
-authStore.initStore(); // Initialize the store from localStorage
+console.log('localStorage Data: ', localStorage.getItem('authState'));
+authStore.initStore(); // initialize the store from localStorage
 pinia.use(({ store }) => {
   store.$auth = authStore;
 });

@@ -8,9 +8,9 @@ import Register from './views/Register.vue'
 
 <template>
   <header> 
-    <router-link :to="{path:'/'}">Home</router-link>  
+    <!-- <router-link :to="{path:'/'}">Home</router-link>  
     <router-link :to="{path:'/login'}">Login</router-link>  
-    <router-link :to="{path:'/register'}">Register</router-link>
+    <router-link :to="{path:'/register'}">Register</router-link> -->
   </header>
 
   <RouterView />

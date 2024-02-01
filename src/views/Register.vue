@@ -20,6 +20,8 @@ const register = () => {
   //get all data in an array
   const a = [username.value, password.value, email.value, fname.value, lname, cpassword];
   //make a dispatch function to send data in store
+  console.log("Data to register: ", a)
+  
   authStore.registerUser(a); 
   console.log('Signed up');
   router.push('/login')
@@ -27,6 +29,8 @@ const register = () => {
 watch([password,cpassword], () => {
   passwordMatch.value=password.value === cpassword.value
 })
+
+
 </script>
 
 <template>
@@ -43,24 +47,24 @@ watch([password,cpassword], () => {
               <v-form @submit.prevent="register">
                 <v-row>
                   <v-col cols="12" md="6">
-                    <v-text-field v-model="fname" label="First Name" required></v-text-field>
+                    <v-text-field v-model="fname" label="First Name" required clearable></v-text-field>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-text-field v-model="lname" label="Last Name" required></v-text-field>
+                    <v-text-field v-model="lname" label="Last Name" required clearable></v-text-field>
                   </v-col>
                 </v-row>
 
                 <v-row>
                   <v-col cols="12" md="6">
-                    <v-text-field v-model="username" label="Username" required></v-text-field>
+                    <v-text-field v-model="username" label="Username" required clearable></v-text-field>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <v-text-field v-model="email" label="E-mail" required></v-text-field>
+                    <v-text-field v-model="email" label="E-mail" type="email" required clearable></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="12" md="6">
-                    <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
+                    <v-text-field v-model="password" label="Password" type="password" required ></v-text-field>
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-text-field
@@ -68,12 +72,13 @@ watch([password,cpassword], () => {
                       label="Confirm Password"
                       type="password"
                       required
+                      
                       :rules="[()=> !!passwordMatch || 'Passwords do not match!']"
                       :error-messages="passwordMatch ? [] : ['Passwords do not match!']"
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                <v-btn class= "ml-auto" color="primary" type="submit">Register</v-btn>
+                <v-btn class="mx-auto, text-white" type="submit" color="cyan-lighten-3" block>Register</v-btn>
               </v-form>
               <a><br /> Already have an account? <router-link to="/login" style="color: rgb(0, 110, 255);">Click Here to Login.</router-link></a>
             </v-card-text>
