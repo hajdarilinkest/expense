@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useAuthStore } from '../stores/store';
 import { useRouter } from 'vue-router';
+import IconCommunity from '@/components/icons/IconCommunity.vue';
 
 
 const usernameOrEmail = ref('');
@@ -19,10 +20,13 @@ const login = async() => {
   
   if(loginLogic) {
     console.log("Redirecting to home..\nCurrent user:", localStorage.getItem('currentUser'))       //delen null
-
-    router.push('/');      
+    router.push('/dashboard');      // direkt ne dashboard qe mos mbesish ne faqe bosh
   } else {
-    alert("Username or Password incorrect!");
+    swal("Username or Password incorrect", {
+      dangerMode: true,
+      button: true, 
+      icon: "error"
+    });
     console.log("Not succesful bro")
   }
 };

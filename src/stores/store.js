@@ -6,6 +6,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     users: [],
     currentUser: null,
+    // registrationDate: null
   }),
   getters: {
     isLoggedIn: (state) => !!state.currentUser,
@@ -13,7 +14,7 @@ export const useAuthStore = defineStore({
   actions: {
     login({ usernameOrEmail, password }) {
       // get users from lStorage
-      const storedUsers = this.users || [];               //dont get from localStorage, get from users array ktu lart sepse pinia ashtu asnjer sboeshte update
+      const storedUsers = this.users || [];               //dont get from localStorage, get from users array because pinia never gets updated that way
       console.log('Users array: ', storedUsers)          // its showing users
 
       const user = storedUsers.find(
@@ -23,8 +24,6 @@ export const useAuthStore = defineStore({
         && user.password === password
       );
       console.log("user here is: ", user)
-
-
 
       if (user) {
         console.log('Successful login: ', user);
@@ -58,7 +57,7 @@ export const useAuthStore = defineStore({
 
     registerUser(userData) {
       const newUser = {
-        id: (this.users ? this.users.length : 0) +1,      //tjeter error      FIXED 
+        id: (this.users ? this.users.length : 0) +1,     
         username: userData[0],
         password: userData[1],
         email: userData[2],
@@ -70,18 +69,32 @@ export const useAuthStore = defineStore({
         this.users = this.users || [];
         this.users.push(newUser);
         console.log('User registered successfully', newUser);
+        this.currentUser = newUser;         //kur bon register menjer bon log in
         this.saveState();
       } catch (error) {
         console.error('Error registering user', error);
       }
     },
+    updateUser(userData) 
+    {
+      console.log("Updating user now....")
+      this.currentUser.username = userData[0];
+      // this.currentUser.password = userData[1];
+      this.currentUser.email = userData[2];
+      this.currentUser.fname = userData[3];
+      this.currentUser.lname = userData[4];
 
+      if (userData[1] !== ''){
+        this.currentUser.password = userData[1];
+      }
+      console.log("New user info: ", this.currentUser)
+    },    
     saveState() {
       const authState = {
         users: this.users,
         currentUser: this.currentUser,
       };
-      console.log("Saving auth state to local: ", authState)                    //currentUser ktu delen a ne LoginView no.
+      console.log("Saving auth state to local: ", authState)              
       localStorage.setItem('authState', JSON.stringify(authState));
     },
   },
