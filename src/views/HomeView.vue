@@ -78,10 +78,10 @@ const navigateTo = (routeName) => {
           >
         </v-list-item>
         <v-list-item 
-        @click="navigateTo('expenses')"
+        @click="navigateTo('transactions')"
         prepend-icon="mdi-cash"
-        title="Expenses"
-        value="expenses"
+        title="Transactions"
+        value="transactions"
         >
         </v-list-item>
           <v-list-item 

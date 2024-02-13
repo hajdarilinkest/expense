@@ -5,6 +5,7 @@
         You are logged in as {{ authStore.currentUser.username }}
         <br>
         <!-- e-mail: {{ authStore.currentUser.email }} -->
+        Account Balance: {{ parseFloat(authStore.currentUser.balance).toFixed(2) }} €
       </p>
 
     </div>

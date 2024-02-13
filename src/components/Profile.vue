@@ -18,9 +18,14 @@ const newpass = ref('');
 const cnewpass =  ref('');
 
 const passwordMatch=   ref(true);
-const oldpasswordMatch = ref(true);
+const oldpasswordMatch = ref(false);
 
 const update = () => {
+  if (password.value=='' && newpass.value !== '' || newpass.value == '' && cnewpass.value !=='')
+  {
+    return;
+  }
+  else {
   console.log("user is currently: ", authStore.currentUser)
   const a = [username.value, newpass.value, email.value, fname.value, lname.value];
   
@@ -29,6 +34,7 @@ const update = () => {
     console.log("Updated info: ", authStore.currentUser)
     swal("Succesfully updated account!","Changes made","success");
     router.push('/dashboard');
+}
 };
 
 
@@ -158,7 +164,7 @@ const isButtonDisabled = computed(() => {
             
           </v-text-field>
         </v-col>
-        <v-col md="4" xs="12">
+        <v-col cols="12" md="4" xs="12">
           <v-text-field
           v-model="cnewpass"
           type="password" 
@@ -168,9 +174,10 @@ const isButtonDisabled = computed(() => {
             
           </v-text-field>
         </v-col>
-        <v-row align="end" justify="end">
+        
+        <v-row justify="end">
         <v-col cols="12" md="4" xs="12">
-        <v-btn class="mx-auto, text-white" type="submit" color="cyan-lighten-1"  variant='tonal' :disabled="isButtonDisabled" block>Save changes</v-btn>
+        <v-btn class="mx-auto, text-white" type="submit" variant="tonal" color="cyan-lighten-1"  :disabled="isButtonDisabled" block>Save changes</v-btn>
         <div ></div>
       </v-col>
       </v-row>
@@ -184,5 +191,14 @@ const isButtonDisabled = computed(() => {
 <style scoped>
 .hello {
     background-color: #f0f2f5;
+}
+.toggle-drawer {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .toggle-drawer {
+    display: block;
+  }
 }
 </style>

@@ -6,6 +6,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     users: [],
     currentUser: null,
+    transactions: [],
     // registrationDate: null
   }),
   getters: {
@@ -63,6 +64,7 @@ export const useAuthStore = defineStore({
         email: userData[2],
         fname: userData[3],
         lname: userData[4],
+        balance : 0.00,
       };
     
       try {
@@ -75,6 +77,32 @@ export const useAuthStore = defineStore({
         console.error('Error registering user', error);
       }
     },
+    makeTransaction(amountMoney) {
+      const newTransaction = {
+        id: Math.random().toString(36).substr(2, 9), // Generate a unique ID
+        label: "Label",
+        amount: amountMoney,
+      };
+      console.log("Store received: ", amountMoney);
+      this.currentUser.balance += parseFloat(amountMoney);
+    
+      this.transactions.push(newTransaction);
+      this.saveState();
+    },
+    
+    hideTransaction(transactionId) {
+      const index = this.transactions.findIndex(transaction => transaction.id === transactionId);
+      if (index !== -1) {
+        this.transactions.splice(index, 1);
+      }
+    }, 
+    deleteTransaction(transactionId, transactionAmount) {
+      const index = this.transactions.findIndex(transaction => transaction.id === transactionId);
+      if (index !== -1) {
+        this.transactions.splice(index, 1);
+        this.currentUser.balance -= parseFloat(transactionAmount)          //fix this
+      }
+    }, 
     updateUser(userData) 
     {
       console.log("Updating user now....")
@@ -93,6 +121,7 @@ export const useAuthStore = defineStore({
       const authState = {
         users: this.users,
         currentUser: this.currentUser,
+        transactions: this.transactions
       };
       console.log("Saving auth state to local: ", authState)              
       localStorage.setItem('authState', JSON.stringify(authState));

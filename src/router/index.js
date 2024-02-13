@@ -4,7 +4,7 @@ import LoginView from '../views/LoginView.vue';
 import Register from '../views/Register.vue';
 import Dashboard from '../components/Dashboard.vue';
 import Reports from '../components/Reports.vue'
-import Expenses from '../components/Expenses.vue'
+import Transactions from '../components/Transactions.vue'
 import Profile from '../components/Profile.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,9 +25,9 @@ const router = createRouter({
           component: Reports,
         },
         {
-          path: 'expenses',
-          name: 'expenses',
-          component: Expenses,
+          path: 'transactions',
+          name: 'transactions',
+          component: Transactions,
         },
         {
           path:"profile",
