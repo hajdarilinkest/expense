@@ -3,8 +3,8 @@ import { watch } from 'vue';
 import { ref } from 'vue';
 import { useAuthStore } from '../stores/store.js'
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 import swal from 'sweetalert';
-
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -18,11 +18,15 @@ const cpassword = ref('');
 const passwordMatch =  ref(true);
 
 const register = () => {
-
-  const a = [username.value, password.value, email.value, fname.value, lname.value, cpassword.value];
-  //make a dispatch function to send data in store
-  console.log("Data to register: ", a)
-  
+    const userData = {
+    'first_name': fname.value,
+    'last_name': lname.value,
+    'username': username.value,
+    'email': email.value,
+    'password': password.value,
+    'password_confirmation': cpassword.value,
+  };
+  console.log(userData.first_name, userData.last_name)
 if (                                                                                        //manual solution, temporary
         username.value  === '' ||
         password.value  === '' ||
@@ -34,6 +38,7 @@ if (                                                                            
  {
   swal("Sign up failed!","Please, make sure you have filled every required field", "warning")
   console.log("Register Failed!")
+  return;
  }
  else if (!passwordMatch.value) {
     swal("Sign up failed!", "Passwords do not match", "error")
@@ -42,12 +47,20 @@ if (                                                                            
   }
 
  else {
-  authStore.registerUser(a); 
-  console.log('Signed up');
-  console.log('Current user? ', authStore.currentUser)
-  router.push('/dashboard')
- }
-};
+
+  axios.post('http://127.0.0.1:8000/api/register', userData)
+      .then(response => {
+        console.log('User registered successfully:', response.data);
+        router.push('/dashboard');
+      })
+      .catch(error => {
+        swal("Sign up failed!", error.response.data.message || "An error occurred while registering user", "error");
+        console.error('Error registering user:', error);
+        return;
+      });
+    authStore.registerUser(userData)
+  }
+ };
 
 watch([password,cpassword], () => {
   passwordMatch.value=password.value === cpassword.value

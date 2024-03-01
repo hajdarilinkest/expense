@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-
+import axios from 'axios';
+import { formatDate } from 'date-fns';
 
 export const useAuthStore = defineStore({
   id: 'auth',
@@ -14,7 +15,6 @@ export const useAuthStore = defineStore({
   },
   actions: {
     login({ usernameOrEmail, password }) {
-      // get users from lStorage
       const storedUsers = this.users || [];               //dont get from localStorage, get from users array because pinia never gets updated that way
       console.log('Users array: ', storedUsers)          // its showing users
 
@@ -56,14 +56,14 @@ export const useAuthStore = defineStore({
       }
     },
 
-    registerUser(userData) {
+      registerUser(userData) {  
       const newUser = {
         id: (this.users ? this.users.length : 0) +1,     
-        username: userData[0],
-        password: userData[1],
-        email: userData[2],
-        fname: userData[3],
-        lname: userData[4],
+        username: userData.username,
+        password: userData.password,
+        email: userData.email,
+        fname: userData.first_name,
+        lname: userData.last_name,
         balance : 0.00,
       };
     
