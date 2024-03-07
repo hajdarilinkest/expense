@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import { formatDate } from 'date-fns';
 
 export const useAuthStore = defineStore({
   id: 'auth',
@@ -14,28 +12,19 @@ export const useAuthStore = defineStore({
     isLoggedIn: (state) => !!state.currentUser,
   },
   actions: {
-    login({ usernameOrEmail, password }) {
-      const storedUsers = this.users || [];               //dont get from localStorage, get from users array because pinia never gets updated that way
-      console.log('Users array: ', storedUsers)          // its showing users
-
-      const user = storedUsers.find(
-        (user) => 
-        (user.username === usernameOrEmail ||
-         user.email === usernameOrEmail)
-        && user.password === password
-      );
-      console.log("user here is: ", user)
-
-      if (user) {
+    login(user, token) {
+      if (user && token) {
         console.log('Successful login: ', user);
         this.currentUser = user;
+        this.token = token; // Store the token
         this.saveState();
-        return true;                //pls work
+        return true;
       } else {
-        console.log('Login failed');        
+        console.log('Login failed');
         return false;
       }
     },
+  
 
     logout() {
       this.currentUser = null;
@@ -62,8 +51,8 @@ export const useAuthStore = defineStore({
         username: userData.username,
         password: userData.password,
         email: userData.email,
-        fname: userData.first_name,
-        lname: userData.last_name,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
         balance : 0.00,
       };
     

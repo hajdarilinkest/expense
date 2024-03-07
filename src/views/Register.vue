@@ -8,7 +8,17 @@ import swal from 'sweetalert';
 const authStore = useAuthStore();
 const router = useRouter();
 
+const loading = ref(false);
 
+watch(loading, (val) => {
+  if (!val) return;
+
+  setTimeout(() => {
+    loading.value = false;
+  }, 1000);
+});
+
+// const id = ref();
 const username = ref('');
 const password = ref('');
 const email = ref('');
@@ -19,6 +29,7 @@ const passwordMatch =  ref(true);
 
 const register = () => {
     const userData = {
+      // 'id' : (this.users ? this.users.length : 0) +1,     //un e shtova
     'first_name': fname.value,
     'last_name': lname.value,
     'username': username.value,
@@ -178,7 +189,16 @@ const cpasswordRules =
                     ></v-text-field>
                   </v-col>
                 </v-row>
-                <v-btn class="mx-auto, text-white" type="submit" color="cyan-lighten-3" block :loading="loading">Register</v-btn>
+                <v-btn 
+                class="mx-auto, text-white" 
+                type="submit" 
+                color="cyan-lighten-3" 
+                block 
+                :loading="loading"
+                @click="loading = !loading"
+                >
+                Register
+              </v-btn>
               </v-form>
               <a><br /> Already have an account? <router-link to="/login" style="color: rgb(0, 110, 255);">Click Here to Login.</router-link></a>
             </v-card-text>
